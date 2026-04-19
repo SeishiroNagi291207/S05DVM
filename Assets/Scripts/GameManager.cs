@@ -1,30 +1,39 @@
-using System;
-using Unity.Cinemachine;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 public class GameManager : MonoBehaviour
 {
-    public CinemachineCamera camA;
-    public CinemachineCamera camB;
+    public static GameManager Instance;
 
+    public FirstPersonController playerController;
+    public TimerUI timerUI;
 
-    [Button("Transition")]
-    public void transition()
+    private void Awake()
     {
-        if (camA.Priority > camB.Priority)
+        if (Instance == null)
         {
-            camA.Priority = 0;
-            camB.Priority = 1;
+            Instance = this;
         }
         else
         {
-            camA.Priority = 1;
-            camB.Priority = 0;
+            Destroy(gameObject);
         }
     }
-    public void OnCameraFinished()
+
+    void Start()
     {
-        Debug.Log("Camera transition finished!");
+        if (playerController != null)
+            playerController.enabled = false;
+
+        if (timerUI != null)
+            timerUI.activo = false;
+    }
+
+    public void StartGameplay()
+    {
+        if (playerController != null)
+            playerController.enabled = true;
+
+        if (timerUI != null)
+            timerUI.activo = true;
     }
 }
